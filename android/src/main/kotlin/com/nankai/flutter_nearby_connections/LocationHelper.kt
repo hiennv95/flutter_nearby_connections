@@ -86,29 +86,41 @@ class LocationHelper(private val activity: Activity) : PluginRegistry.ActivityRe
     }
 
     private fun requestLocationEnable() {
-        val task = LocationServices.getSettingsClient(activity)
-                .checkLocationSettings(mLocationSettingsRequest)
-        task.addOnCompleteListener { t ->
-            try {
-                t.getResult(ApiException::class.java)
-                result?.success(true)
-            } catch (ex: ApiException) {
-                when (ex.statusCode) {
-                    LocationSettingsStatusCodes.SUCCESS -> {
-                        result?.success(true)
-                    }
-                    LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> try {
-                        val resolvableApiException = ex as ResolvableApiException
-                        resolvableApiException
-                                .startResolutionForResult(activity, LOCATION_ENABLE_REQUEST)
-                    } catch (e: IntentSender.SendIntentException) {
-                        result?.error("LOCATION_SERVICE_ERROR", e.message, null)
-                    }
-                    else -> {
-                        result?.success(false)
+        mLocationSettingsRequest?.let { request ->
+            val task = LocationServices.getSettingsClient(activity).checkLocationSettings(request)
+            task.addOnCompleteListener { t ->
+                try {
+                    t.getResult(ApiException::class.java)
+                    result?.success(true)
+                } catch (ex: ApiException) {
+                    when (ex.statusCode) {
+                        LocationSettingsStatusCodes.SUCCESS -> {
+                            result?.success(true)
+                        }
+
+                        LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> try {
+                            val resolvableApiException = ex as ResolvableApiException
+                            resolvableApiException.startResolutionForResult(
+                                    activity,
+                                    LOCATION_ENABLE_REQUEST
+                                )
+                        } catch (e: IntentSender.SendIntentException) {
+                            result?.error("LOCATION_SERVICE_ERROR", e.message, null)
+                        }
+
+                        else -> {
+                            result?.success(false)
+                        }
                     }
                 }
             }
+        } ?: run {
+            // Handle the case where mLocationSettingsRequest is null
+            result?.error(
+                "LOCATION_SERVICE_ERROR",
+                "LocationSettingsRequest is not initialized",
+                null
+            )
         }
     }
 }

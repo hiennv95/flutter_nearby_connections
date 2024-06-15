@@ -140,9 +140,13 @@ class FlutterNearbyConnectionsPlugin : FlutterPlugin, MethodCallHandler, Activit
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
-        serviceBindManager.mService?.stopAdvertising()
-        serviceBindManager.mService?.stopDiscovery()
-        serviceBindManager.unbindService()
+        serviceBindManager?.let { manager ->
+            manager.mService?.let { service ->
+                service.stopAdvertising()
+                service.stopDiscovery()
+            }
+            manager.unbindService()
+        }
         locationHelper = null
         exitProcess(0)
     }
