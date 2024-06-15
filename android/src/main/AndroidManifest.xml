@@ -18,11 +18,17 @@
 
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+    <uses-permission android:minSdkVersion="31" android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <uses-permission android:minSdkVersion="31" android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:minSdkVersion="31" android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:minSdkVersion="32" android:name="android.permission.NEARBY_WIFI_DEVICES" />
 
     <application>
         <service
             android:name=".NearbyService"
             android:enabled="true"
+            android:foregroundServiceType="connectedDevice"
             android:exported="false"/>
 
 

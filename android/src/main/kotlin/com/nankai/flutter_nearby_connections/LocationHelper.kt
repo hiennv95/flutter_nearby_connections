@@ -35,7 +35,11 @@ class LocationHelper(private val activity: Activity) : PluginRegistry.ActivityRe
                 Manifest.permission.ACCESS_WIFI_STATE,
                 Manifest.permission.CHANGE_WIFI_STATE,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.BLUETOOTH_SCAN,
+                Manifest.permission.BLUETOOTH_ADVERTISE,
+                Manifest.permission.BLUETOOTH_CONNECT,
+                Manifest.permission.NEARBY_WIFI_DEVICES), REQUEST_LOCATION_PERMISSION)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean =

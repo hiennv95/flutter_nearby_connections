@@ -95,10 +95,12 @@ class FlutterNearbyConnectionsPlugin : FlutterPlugin, MethodCallHandler, Activit
             startAdvertisingPeer -> {
                 Log.d("nearby_connections", "startAdvertisingPeer")
                 serviceBindManager.mService?.startAdvertising(strategy, localDeviceName)
+                result.success(true)
             }
             startBrowsingForPeers -> {
                 Log.d("nearby_connections", "startBrowsingForPeers")
                 serviceBindManager.mService?.startDiscovery(strategy)
+                result.success(true)
             }
             stopAdvertisingPeer -> {
                 Log.d("nearby_connections", "stopAdvertisingPeer")
@@ -117,6 +119,7 @@ class FlutterNearbyConnectionsPlugin : FlutterPlugin, MethodCallHandler, Activit
                 val deviceId = call.argument<String>("deviceId")
                 val displayName = call.argument<String>("deviceName")
                 serviceBindManager.mService?.connect(deviceId!!, displayName!!)
+                result.success(true)
             }
             disconnectPeer -> {
                 Log.d("nearby_connections", "disconnectPeer")
@@ -130,6 +133,7 @@ class FlutterNearbyConnectionsPlugin : FlutterPlugin, MethodCallHandler, Activit
                 val deviceId = call.argument<String>("deviceId")
                 val message = call.argument<String>("message")
                 serviceBindManager.mService?.sendStringPayload(deviceId!!, message!!)
+                result.success(true)
             }
         }
     }
